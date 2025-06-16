@@ -5,6 +5,8 @@ import 'package:geolocator/geolocator.dart';
 import 'package:my_digipin/utils/digipin.dart';
 import 'package:my_digipin/widgets/icon_container.dart';
 import 'package:my_digipin/widgets/reusable_container.dart';
+import 'package:share_plus/share_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 void main() {
   runApp(const MyApp());
@@ -37,8 +39,11 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  final TextEditingController _controller = TextEditingController();
   String digipin = "ABC-ABC-ABCD";
+  String userInputDigipin = "";
   bool loading = false;
+  bool decodeLoading = false;
 
   double lat = 0.0;
   double lon = 0.0;
@@ -73,6 +78,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
       lat = position.latitude;
       lon = position.longitude;
+
+      // lat = 25.2632267;
+      // lon = 82.9939901;
 
       String pin = DigiPin.getDigiPin(lat, lon);
 
@@ -114,7 +122,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 ? digipin
                                 : "Your DigiPin will appear here",
                             style: const TextStyle(
-                              fontSize: 36,
+                              fontSize: 32,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -122,7 +130,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           IconContainer(
                             marginR: 4,
                             child: IconButton(
-                              iconSize: 32.0,
+                              iconSize: 28.0,
                               onPressed: loading
                                   ? null
                                   : () {
@@ -142,11 +150,21 @@ class _MyHomePageState extends State<MyHomePage> {
                           ),
                           IconContainer(
                             child: IconButton(
-                              iconSize: 32.0,
+                              iconSize: 28.0,
                               onPressed: loading
                                   ? null
-                                  : () {
-                                      // Add share logic here if needed
+                                  : () async {
+                                      try {
+                                        await Share.share(
+                                          'My Current DigiPin is: $digipin',
+                                        );
+                                      } catch (e) {
+                                        ScaffoldMessenger.of(
+                                          context,
+                                        ).showSnackBar(
+                                          SnackBar(content: Text("Error: $e")),
+                                        );
+                                      }
                                     },
                               icon: const Icon(Icons.share),
                             ),
@@ -160,9 +178,23 @@ class _MyHomePageState extends State<MyHomePage> {
                       const Spacer(),
                       ElevatedButton(
                         style: ButtonStyle(
-                          backgroundColor: WidgetStatePropertyAll(Colors.amber),
+                          backgroundColor: WidgetStatePropertyAll(
+                            const Color.fromARGB(255, 255, 255, 255),
+                          ),
                         ),
-                        onPressed: loading ? null : generateDigiPin,
+                        onPressed: loading
+                            ? null
+                            : () {
+                                try {
+                                  generateDigiPin();
+                                } catch (e) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text("Error: ${e.toString}"),
+                                    ),
+                                  );
+                                }
+                              },
                         child: loading
                             ? Row(
                                 mainAxisSize: MainAxisSize.min,
@@ -188,8 +220,160 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             const SizedBox(height: 20),
             ReusableContainer(
-              color: Colors.purpleAccent,
-              child: const Text("Other content here"),
+              color: Color.fromARGB(255, 76, 91, 92),
+              child: Column(
+                children: [
+                  Card(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 6,
+                        vertical: 2,
+                      ),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.all(4.0),
+                              child: TextField(
+                                controller: _controller,
+                                textCapitalization:
+                                    TextCapitalization.characters,
+                                cursorHeight: 30,
+                                style: TextStyle(
+                                  fontSize: 32,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                // obscureText: true,
+                                decoration: InputDecoration(
+                                  border: OutlineInputBorder(),
+                                  labelText: 'Enter Digipin',
+                                  isDense: true,
+                                  contentPadding: EdgeInsets.symmetric(
+                                    vertical: 0,
+                                    horizontal: 10,
+                                  ),
+                                ),
+
+                                onChanged: (value) => {
+                                  setState(() {
+                                    _controller.text = value.toUpperCase();
+                                  }),
+                                  // print(_controller.text),
+                                },
+                              ),
+                            ),
+                          ),
+                          IconContainer(
+                            child: IconButton(
+                              iconSize: 28.0,
+                              onPressed: loading
+                                  ? null
+                                  : () async {
+                                      final clipBoardData =
+                                          await Clipboard.getData(
+                                            Clipboard.kTextPlain,
+                                          );
+                                      final pastedText =
+                                          clipBoardData?.text ?? '';
+                                      setState(() {
+                                        _controller.text = pastedText
+                                            .toUpperCase();
+                                        // ScaffoldMessenger.of(
+                                        //   context,
+                                        // ).showSnackBar(
+                                        //   SnackBar(
+                                        //     content: Text(
+                                        //       'Pasted: $pastedText',
+                                        //     ),
+                                        //   ),
+                                        // );
+                                      });
+                                    },
+                              icon: const Icon(Icons.paste),
+                            ),
+                          ),
+
+                          // Spacer(),
+                          // ElevatedButton(
+                          //   onPressed: () {},
+                          //   child: Text("Open in Maps"),
+                          // ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      Spacer(),
+                      ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor: WidgetStatePropertyAll(Colors.white),
+                        ),
+                        onPressed: decodeLoading
+                            ? null
+                            : () async {
+                                try {
+                                  decodeLoading = true;
+                                  // generateDigiPin();
+                                  final input = _controller.text
+                                      .trim()
+                                      .toUpperCase();
+
+                                  final coords = DigiPin.getLatLngFromDigiPin(
+                                    input,
+                                  );
+                                  final lat = coords['latitude'];
+                                  final lon = coords['longitude'];
+
+                                  final googleMapsUrl =
+                                      'https://www.google.com/maps/search/?api=1&query=$lat,$lon';
+
+                                  final uri = Uri.parse(googleMapsUrl);
+                                  try {
+                                    decodeLoading = false;
+                                    await launchUrl(
+                                      uri,
+                                      mode: LaunchMode.externalApplication,
+                                    );
+                                  } catch (e) {
+                                    decodeLoading = false;
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                          "Could not open Google Maps: $e",
+                                        ),
+                                      ),
+                                    );
+                                  }
+                                  decodeLoading = false;
+                                } catch (e) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(content: Text("Error: $e")),
+                                  );
+                                }
+                              },
+                        child: decodeLoading
+                            ? Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: const [
+                                  SizedBox(
+                                    width: 20,
+                                    height: 20,
+                                    child: CircularProgressIndicator(
+                                      color: Colors.white,
+                                      strokeWidth: 2,
+                                    ),
+                                  ),
+                                  SizedBox(width: 10),
+                                  Text("Decoding..."),
+                                ],
+                              )
+                            : const Text("Open in Maps"),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ],
         ),

@@ -9,7 +9,7 @@ class ReusableContainer extends StatelessWidget {
     super.key,
     required this.child,
     this.height = 200,
-    this.color = Colors.amberAccent,
+    this.color = const Color.fromARGB(255, 76, 91, 92),
   });
 
   @override
