@@ -218,7 +218,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 ],
               ),
             ),
-            const SizedBox(height: 20),
+            // const SizedBox(height: 20),
             ReusableContainer(
               color: Color.fromARGB(255, 76, 91, 92),
               child: Column(
@@ -373,6 +373,45 @@ class _MyHomePageState extends State<MyHomePage> {
                     ],
                   ),
                 ],
+              ),
+            ),
+            ReusableContainer(
+              child: Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: Row(
+                    children: [
+                      Text(
+                        "2JP-594-88TK",
+                        style: const TextStyle(
+                          fontSize: 28,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Spacer(),
+                      IconContainer(
+                        marginR: 4,
+                        child: IconButton(
+                          onPressed: () {},
+                          icon: Icon(Icons.copy, size: 22),
+                        ),
+                      ),
+                      IconContainer(
+                        marginR: 4,
+                        child: IconButton(
+                          onPressed: () {},
+                          icon: Icon(Icons.share, size: 22),
+                        ),
+                      ),
+                      IconContainer(
+                        child: IconButton(
+                          onPressed: () {},
+                          icon: Icon(Icons.map_outlined, size: 22),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ),
             ),
           ],

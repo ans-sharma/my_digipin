@@ -17,6 +17,7 @@ class ReusableContainer extends StatelessWidget {
     return Container(
       width: double.infinity,
       // height: height,
+      // height: 0,
       padding: EdgeInsets.all(10),
       margin: EdgeInsets.all(6),
       decoration: BoxDecoration(
