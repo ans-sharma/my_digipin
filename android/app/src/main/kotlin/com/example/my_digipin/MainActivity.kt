@@ -1,4 +1,4 @@
-package com.example.my_digipin
+package com.anshuman.my_digipin
 
 import io.flutter.embedding.android.FlutterActivity
 

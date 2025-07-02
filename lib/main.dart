@@ -8,7 +8,7 @@ import 'package:my_digipin/widgets/reusable_container.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-void main() {
+void main() async {
   runApp(const MyApp());
 }
 
@@ -20,12 +20,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Digipin',
+      title: 'My Digipin',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
       ),
-      home: const MyHomePage(title: 'Digipin'),
+      home: const MyHomePage(title: 'My Digipin'),
     );
   }
 }
@@ -102,11 +102,14 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
+        centerTitle: true,
+        // titleTextStyle: TextStyle(fontSize: 16),
       ),
       body: Center(
         child: Column(
           children: [
             ReusableContainer(
+              color: Colors.blue.shade200,
               child: Column(
                 children: [
                   Card(
@@ -220,7 +223,8 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             // const SizedBox(height: 20),
             ReusableContainer(
-              color: Color.fromARGB(255, 76, 91, 92),
+              // color: Color.fromARGB(255, 76, 91, 92),
+              color: Colors.blue.shade200,
               child: Column(
                 children: [
                   Card(
@@ -375,45 +379,45 @@ class _MyHomePageState extends State<MyHomePage> {
                 ],
               ),
             ),
-            ReusableContainer(
-              child: Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: Row(
-                    children: [
-                      Text(
-                        "2JP-594-88TK",
-                        style: const TextStyle(
-                          fontSize: 28,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Spacer(),
-                      IconContainer(
-                        marginR: 4,
-                        child: IconButton(
-                          onPressed: () {},
-                          icon: Icon(Icons.copy, size: 22),
-                        ),
-                      ),
-                      IconContainer(
-                        marginR: 4,
-                        child: IconButton(
-                          onPressed: () {},
-                          icon: Icon(Icons.share, size: 22),
-                        ),
-                      ),
-                      IconContainer(
-                        child: IconButton(
-                          onPressed: () {},
-                          icon: Icon(Icons.map_outlined, size: 22),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
+            // ReusableContainer(
+            //   child: Card(
+            //     child: Padding(
+            //       padding: const EdgeInsets.all(4.0),
+            //       child: Row(
+            //         children: [
+            //           Text(
+            //             "2JP-594-88TK",
+            //             style: const TextStyle(
+            //               fontSize: 28,
+            //               fontWeight: FontWeight.bold,
+            //             ),
+            //           ),
+            //           Spacer(),
+            //           IconContainer(
+            //             marginR: 4,
+            //             child: IconButton(
+            //               onPressed: () {},
+            //               icon: Icon(Icons.copy, size: 22),
+            //             ),
+            //           ),
+            //           IconContainer(
+            //             marginR: 4,
+            //             child: IconButton(
+            //               onPressed: () {},
+            //               icon: Icon(Icons.share, size: 22),
+            //             ),
+            //           ),
+            //           IconContainer(
+            //             child: IconButton(
+            //               onPressed: () {},
+            //               icon: Icon(Icons.map_outlined, size: 22),
+            //             ),
+            //           ),
+            //         ],
+            //       ),
+            //     ),
+            //   ),
+            // ),
           ],
         ),
       ),
