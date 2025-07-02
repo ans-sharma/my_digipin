@@ -1,0 +1,17 @@
+# flutter_native_splash-production.yaml
+flutter_native_splash:
+  color: "#ffffff"
+  image: assets/icon/digipin_icon_main_nobg.png
+  branding: assets/icon/digipin_icon_main_nobg.png
+  branding_bottom_padding: 24
+  color_dark: "#ffffff"
+  image_dark: assets/icon/digipin_icon_main_nobg.png
+  branding_dark: assets/icon/digipin_icon_main_nobg.png
+
+  android_12:
+    image: assets/icon/digipin_icon_main_nobg.png
+    icon_background_color: "#ffffff"
+    image_dark: assets/icon/digipin_icon_main_nobg.png
+    icon_background_color_dark: "#ffffff"
+
+  web: false
